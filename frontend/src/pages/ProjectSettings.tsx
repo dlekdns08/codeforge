@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FolderOpen, Plus, Trash2 } from 'lucide-react';
+import { FolderOpen, Plus } from 'lucide-react';
 import { api } from '../api/client';
 import { Card } from '../components/shared/Card';
 

@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   GitBranch, Play, CheckCircle, XCircle, Clock,
-  ChevronDown, ChevronRight, Terminal,
+  ChevronDown, ChevronRight,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { useWebSocket } from '../hooks/useWebSocket';

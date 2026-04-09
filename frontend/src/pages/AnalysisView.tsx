@@ -1,8 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import {
-  Shield, Play, FileCode, AlertTriangle, Filter,
-} from 'lucide-react';
+import { Play } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';

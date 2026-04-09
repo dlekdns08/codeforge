@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import {
-  Shield, GitBranch, Activity, TrendingUp,
-  Play, AlertTriangle, CheckCircle, XCircle,
+  Shield, Activity, TrendingUp,
+  Play, CheckCircle, XCircle,
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { api } from '../api/client';
