@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  DEPLOY_PATH: /opt/codeforge
+  DEPLOY_PATH: /app/actions-runner-codeforge/deploy
   DOMAIN: forge.koala.ai.kr
 
 jobs:
