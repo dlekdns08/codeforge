@@ -39,7 +39,6 @@ def create_app() -> FastAPI:
         CORSMiddleware,
         allow_origins=[
             "http://localhost:7291",
-            "https://forge.koala.ai.kr",
             "http://forge.koala.ai.kr",
         ],
         allow_credentials=True,

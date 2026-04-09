@@ -6,8 +6,6 @@ on:
   workflow_dispatch:
 
 env:
-  DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-  DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
   DEPLOY_PATH: /opt/codeforge
   DOMAIN: forge.koala.ai.kr
 
@@ -20,89 +18,37 @@ jobs:
         with:
           path: codeforge
 
-      # pipeforge와 codemind도 같은 org/repo에 있다면 별도 checkout
-      # 아니면 서버에 이미 있다고 가정
       - name: Checkout pipeforge
         uses: actions/checkout@v4
         with:
           repository: ${{ github.repository_owner }}/pipeforge
           path: pipeforge
-          token: ${{ secrets.GH_PAT }}
 
       - name: Checkout codemind
         uses: actions/checkout@v4
         with:
           repository: ${{ github.repository_owner }}/codemind
           path: codemind
-          token: ${{ secrets.GH_PAT }}
-
-      - name: Create deployment directory
-        run: |
-          sudo mkdir -p ${{ env.DEPLOY_PATH }}
-          sudo chown $USER:$USER ${{ env.DEPLOY_PATH }}
 
       - name: Copy project files
         run: |
-          rsync -a --delete pipeforge/ ${{ env.DEPLOY_PATH }}/pipeforge/
-          rsync -a --delete codemind/ ${{ env.DEPLOY_PATH }}/codemind/
-          rsync -a --delete codeforge/ ${{ env.DEPLOY_PATH }}/codeforge/
+          mkdir -p $DEPLOY_PATH
+          rsync -a --delete pipeforge/ $DEPLOY_PATH/pipeforge/
+          rsync -a --delete codemind/ $DEPLOY_PATH/codemind/
+          rsync -a --delete codeforge/ $DEPLOY_PATH/codeforge/
 
-      - name: Setup SSL certificate (first time only)
+      - name: Build and deploy
         run: |
-          if [ ! -d "${{ env.DEPLOY_PATH }}/codeforge/nginx/certs/live/${{ env.DOMAIN }}" ]; then
-            echo "No SSL cert found. Obtaining from Let's Encrypt..."
-
-            # Temporarily start nginx with HTTP only for ACME challenge
-            cd ${{ env.DEPLOY_PATH }}
-
-            # Create temp nginx config for cert acquisition
-            cat > /tmp/nginx-certonly.conf << 'NGINX'
-          events { worker_connections 1024; }
-          http {
-            server {
-              listen 80;
-              server_name ${{ env.DOMAIN }};
-              location /.well-known/acme-challenge/ { root /var/www/certbot; }
-              location / { return 200 'waiting for cert'; }
-            }
-          }
-          NGINX
-
-            docker run -d --name certbot-nginx \
-              -p 80:80 \
-              -v /tmp/nginx-certonly.conf:/etc/nginx/nginx.conf:ro \
-              -v ${{ env.DEPLOY_PATH }}/codeforge/nginx/certbot-webroot:/var/www/certbot \
-              nginx:alpine
-
-            # Get certificate
-            mkdir -p ${{ env.DEPLOY_PATH }}/codeforge/nginx/certs
-            docker run --rm \
-              -v ${{ env.DEPLOY_PATH }}/codeforge/nginx/certs:/etc/letsencrypt \
-              -v ${{ env.DEPLOY_PATH }}/codeforge/nginx/certbot-webroot:/var/www/certbot \
-              certbot/certbot certonly --webroot \
-              --webroot-path=/var/www/certbot \
-              --email ${{ secrets.CERTBOT_EMAIL }} \
-              --agree-tos --no-eff-email \
-              -d ${{ env.DOMAIN }}
-
-            docker stop certbot-nginx && docker rm certbot-nginx
-          else
-            echo "SSL cert already exists."
-          fi
-
-      - name: Build and deploy with Docker Compose
-        run: |
-          cd ${{ env.DEPLOY_PATH }}/codeforge
+          cd $DEPLOY_PATH/codeforge
           docker compose down || true
           docker compose build --no-cache
           docker compose up -d
 
       - name: Health check
         run: |
-          echo "Waiting for service to start..."
           sleep 5
           curl -sf http://localhost:8731/api/projects || (echo "Health check failed!" && exit 1)
-          echo "CodeForge is running at https://${{ env.DOMAIN }}"
+          echo "CodeForge is running at https://$DOMAIN"
 
       - name: Cleanup old images
         run: docker image prune -f

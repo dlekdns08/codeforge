@@ -16,6 +16,6 @@ class ServerConfig:
     static_dir: Path | None = None
     cors_origins: list[str] = field(default_factory=lambda: [
         "http://localhost:7291",
-        "https://forge.koala.ai.kr",
+        "http://forge.koala.ai.kr",
     ])
     debug: bool = False
