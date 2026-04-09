@@ -46,9 +46,14 @@ jobs:
 
       - name: Health check
         run: |
-          sleep 5
-          curl -sf http://localhost:8731/api/projects || (echo "Health check failed!" && exit 1)
-          echo "CodeForge is running at https://$DOMAIN"
+          for i in 1 2 3 4 5 6; do
+            sleep 5
+            curl -sf http://localhost:8731/api/projects && echo "CodeForge is running at http://$DOMAIN" && exit 0
+            echo "Attempt $i failed, retrying..."
+          done
+          echo "Health check failed after 6 attempts"
+          docker logs codeforge-app --tail 20
+          exit 1
 
       - name: Cleanup old images
         run: docker image prune -f
