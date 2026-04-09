@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: codeforge
+Version: 0.1.0
+Summary: Developer Dashboard - PipeForge + CodeMind unified platform
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: pipeforge @ file:///../pipeforge
+Requires-Dist: codemind @ file:///../codemind
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: uvicorn[standard]>=0.34.0
+Requires-Dist: websockets>=14.0
+Requires-Dist: aiosqlite>=0.21.0

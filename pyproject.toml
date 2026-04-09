@@ -1,0 +1,25 @@
+[project]
+name = "codeforge"
+version = "0.1.0"
+description = "Developer Dashboard - PipeForge + CodeMind unified platform"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pipeforge",
+    "codemind",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "websockets>=14.0",
+    "aiosqlite>=0.21.0",
+]
+
+[tool.uv.sources]
+pipeforge = { path = "../pipeforge", editable = true }
+codemind = { path = "../codemind", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+codeforge = "codeforge.__main__:main"

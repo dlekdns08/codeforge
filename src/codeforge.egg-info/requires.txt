@@ -1,0 +1,6 @@
+pipeforge @ file:///../pipeforge
+codemind @ file:///../codemind
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+websockets>=14.0
+aiosqlite>=0.21.0

@@ -1,0 +1,2 @@
+[console_scripts]
+codeforge = codeforge.__main__:main
