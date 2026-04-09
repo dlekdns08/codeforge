@@ -37,7 +37,11 @@ def create_app() -> FastAPI:
     # CORS for Vite dev server
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173"],
+        allow_origins=[
+            "http://localhost:7291",
+            "https://forge.koala.ai.kr",
+            "http://forge.koala.ai.kr",
+        ],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

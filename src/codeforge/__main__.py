@@ -15,7 +15,7 @@ def cli() -> None:
 
 @cli.command()
 @click.option("--host", default="0.0.0.0", help="Server host")
-@click.option("--port", "-p", default=8430, type=int, help="Server port")
+@click.option("--port", "-p", default=8731, type=int, help="Server port")
 @click.option("--debug", is_flag=True, help="Enable debug mode")
 def serve(host: str, port: int, debug: bool) -> None:
     """Start the CodeForge web server."""

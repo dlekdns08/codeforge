@@ -11,8 +11,11 @@ class ServerConfig:
     """Web server configuration."""
 
     host: str = "0.0.0.0"
-    port: int = 8430
+    port: int = 8731
     db_path: Path = Path("codeforge.db")
     static_dir: Path | None = None
-    cors_origins: list[str] = field(default_factory=lambda: ["http://localhost:5173"])
+    cors_origins: list[str] = field(default_factory=lambda: [
+        "http://localhost:7291",
+        "https://forge.koala.ai.kr",
+    ])
     debug: bool = False
